@@ -40,18 +40,17 @@ def rename(file):
 
 def upload(request):
     if request.method == 'POST':
-        base_url = "http://" + request.META["HTTP_HOST"] + "/"
         files = request.FILES
         if files:
             ret = {'code': SUCCESS_CODE, 'message': SUCCESS_MESSAGE, 'urls': []}
             for fileName in files:
                 file = request.FILES.get(fileName)
-                if file.size > 5 * 1024 * 1024:
+                if file.size > 10 * 1024 * 1024:
                     return JsonResponse({'code': FAILURE_CODE, 'message': SIZE_ERROR})
                 md5 = get_file_md5(file)
                 img_obj = models.UploadImage.objects.filter(imgMd5=md5)
                 if img_obj:
-                    url = base_url + img_obj.first().imgPath
+                    url = img_obj.first().imgPath
                     info = {'name': file.name, 'url': url}
                 else:
                     path = rename(file)
@@ -61,7 +60,7 @@ def upload(request):
                         imgType=os.path.splitext(file.name)[1],
                         imgSize=file.size,
                         imgPath=path)
-                    url = base_url + create.imgPath
+                    url = create.imgPath
                     info = {'name': file.name, 'url': url}
                 ret['urls'].append(info)
             return JsonResponse(ret)
