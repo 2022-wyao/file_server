@@ -1,13 +1,12 @@
 # upload_server
 #### 服务环境
 
-- python：3.5.2
-- django：2.0
+- python：3.8.2
 
 #### 开启服务
 
 ```powershell
-python .\manage.py runserver
+python manage.py runserver 0.0.0.0 8000
 ```
 
 #### 接口
@@ -56,4 +55,3 @@ python .\manage.py runserver
   }
   ```
 
-  
